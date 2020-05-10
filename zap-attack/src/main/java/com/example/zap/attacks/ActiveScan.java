@@ -1,22 +1,24 @@
 package com.example.zap.attacks;
 
+import com.example.zap.model.ResponseScanning;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.zaproxy.clientapi.core.ApiResponse;
 import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ClientApi;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Logger;
 
 import static com.example.zap.attacks.ZapConstants.*;
 
 @Component
 public class ActiveScan implements Scanner {
-    private Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(ActiveScan.class);
 
-    public String scan(ApiResponse urlRequest) {
+    public ResponseScanning scan(ApiResponse urlRequest) {
 
         ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
-        String result = "";
+        ResponseScanning responseScanning = new ResponseScanning();
         try {
             String url = ((ApiResponseElement)urlRequest).getValue();
             System.out.println("Active Scanning target : " + url);
@@ -36,12 +38,14 @@ public class ActiveScan implements Scanner {
                     break;
                 }
             }
-            System.out.println("Active Scan complete");
-            result = new String(api.core.jsonreport(), StandardCharsets.UTF_8);
+            this.logger.info("Active Scan complete");
+            responseScanning.setUrl(url);
+            responseScanning.setAlerts(new String(api.core.jsonreport(), StandardCharsets.UTF_8));
+
 
         } catch (Exception e) {
-            this.logger.severe("Exception : " + e.getMessage());
+            this.logger.error("Exception : " + e.getMessage());
         }
-        return result;
+        return responseScanning;
     }
 }

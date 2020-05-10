@@ -1,18 +1,19 @@
 package com.example.zap.attacks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.zaproxy.clientapi.core.ApiResponse;
 import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ApiResponseList;
 import org.zaproxy.clientapi.core.ClientApi;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static com.example.zap.attacks.ZapConstants.*;
 
 @Component
 public class SpideringZAP implements Spidering{
-    private Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(SpideringZAP.class);
 
     public List<ApiResponse> spidering(String url){
         ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
@@ -35,8 +36,7 @@ public class SpideringZAP implements Spidering{
             spiderResults = ((ApiResponseList) api.spider.results(scanID)).getItems();
 
         } catch (Exception e) {
-            this.logger.severe("Exception : " + e.getMessage());
-            e.printStackTrace();
+            this.logger.error("Exception : " + e.getMessage());
         }
         return spiderResults;
     }

@@ -1,15 +1,14 @@
 package com.example.zap.attacks;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ClientApi;
-
-import java.nio.charset.StandardCharsets;
-import java.util.logging.Logger;
 
 import static com.example.zap.attacks.ZapConstants.*;
 
 public class PassiveScan {
-    private Logger logger;
+    private final Logger logger = LoggerFactory.getLogger(PassiveScan.class);
 
     public void scanning(String url) {
         ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
@@ -28,7 +27,7 @@ public class PassiveScan {
             this.logger.info("Passive Scan completed");
 
         } catch (Exception e) {
-            this.logger.severe("Exception : " + e.getMessage());
+            this.logger.error("Exception : " + e.getMessage());
         }
     }
 }
