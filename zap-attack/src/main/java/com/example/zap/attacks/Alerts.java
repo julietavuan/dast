@@ -10,12 +10,9 @@ import java.util.List;
 
 import java.util.Map;
 
-public class Alerts {
+import static com.example.zap.attacks.ZapConstants.*;
 
-    private static final String ZAP_ADDRESS = "localhost";
-    private static final int ZAP_PORT = 8080;
-    // Change to match the API key set in ZAP, or use NULL if the API key is disabled
-    private static final String ZAP_API_KEY = "change me";
+public class Alerts {
 
     private static List<String> blackListPlugins = Arrays.asList("1000", "1025");
 

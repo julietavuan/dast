@@ -1,5 +1,6 @@
-package com.example.zap.publisher;
+package com.example.zap.streaming.publisher;
 
+import com.example.zap.streaming.KafkaConstants;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;

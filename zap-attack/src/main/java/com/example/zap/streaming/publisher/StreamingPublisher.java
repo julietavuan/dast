@@ -1,4 +1,4 @@
-package com.example.zap.publisher;
+package com.example.zap.streaming.publisher;
 
 import com.example.zap.model.ResponseScanning;
 
