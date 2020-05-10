@@ -1,4 +1,4 @@
-package com.dast.dast.publisher;
+package com.dast.streaming.publisher;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;

@@ -1,4 +1,4 @@
-package com.dast.dast;
+package com.dast;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

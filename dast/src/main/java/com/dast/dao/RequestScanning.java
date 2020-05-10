@@ -1,4 +1,4 @@
-package com.dast.dast.dao;
+package com.dast.dao;
 
 public class RequestScanning {
     private String url;

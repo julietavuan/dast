@@ -1,10 +1,9 @@
 package com.example.zap.streaming.publisher;
+import com.example.zap.streaming.serialization.AnalysisResult;
 
-import com.example.zap.model.ResponseScanning;
-
-import java.util.stream.Stream;
+import java.util.List;
 
 
 public interface StreamingPublisher {
-    void publish(Stream<ResponseScanning> scanning);
+    void publish(List<AnalysisResult> scanning);
 }

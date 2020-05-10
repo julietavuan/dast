@@ -1,4 +1,4 @@
-package com.dast.dast.consumer;
+package com.dast.streaming.consumer;
 
 public interface StreamingConsumer {
 }

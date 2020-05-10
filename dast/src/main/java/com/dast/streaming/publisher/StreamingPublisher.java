@@ -1,6 +1,6 @@
-package com.dast.dast.publisher;
+package com.dast.streaming.publisher;
 
-import com.dast.dast.dao.RequestScanning;
+import com.dast.dao.RequestScanning;
 
 
 public interface StreamingPublisher {
