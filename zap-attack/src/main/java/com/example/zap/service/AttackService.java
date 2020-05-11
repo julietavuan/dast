@@ -2,7 +2,8 @@ package com.example.zap.service;
 
 import com.example.zap.attacks.Scanner;
 import com.example.zap.attacks.Spidering;
-import com.example.zap.model.ActiveScanResponse;
+import com.example.zap.model.ActiveScan;
+import com.example.zap.model.ScanningResponse;
 import com.example.zap.streaming.publisher.StreamingPublisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,10 +26,12 @@ public class AttackService {
 /*        List<AnalysisResult> analysisResults = urlSpidering.stream()
                 .map(element -> this.scanner.scan(element))
                 .collect(Collectors.toList());*/
-        ActiveScanResponse activeScanResponse = this.scanner.scan(urlSpidering.get(0));
-        List<ActiveScanResponse> analysisResults = new ArrayList<>();
-        analysisResults.add(activeScanResponse);
-        this.streamingPublisher.publish(analysisResults);
+
+        ActiveScan activeScanResponse = this.scanner.scan(urlSpidering.get(0));
+        List<ActiveScan> activeScanList = new ArrayList<>();
+        activeScanList.add(activeScanResponse);
+        ScanningResponse scanningResponse = new ScanningResponse(url, activeScanList);
+        this.streamingPublisher.publish(scanningResponse);
 
     }
 

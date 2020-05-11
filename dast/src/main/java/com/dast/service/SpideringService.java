@@ -1,20 +1,15 @@
 package com.dast.service;
 
 import com.dast.dao.RequestScanning;
-import com.dast.model.ActiveScanResponse;
+import com.dast.model.ActiveScan;
 import com.dast.model.Scanning;
-import com.dast.model.Site;
+import com.dast.model.ScanningResponse;
 import com.dast.streaming.publisher.StreamingPublisher;
 import com.dast.repository.ScanningRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -50,8 +45,11 @@ public class SpideringService {
         return savedScanning;
     }
 
-    public Scanning getScanningByUrl(RequestScanning newScanning){
-        Scanning scanning = this.scanningRepository.findByUrl(newScanning.getUrl());
+    public Scanning getScanningByUrl(String url){
+        return this.scanningRepository.findByUrl(url);
+    }
+
+    public Scanning scanningUpdated(Scanning scanning){
         Date now = new Date();
         if((scanning!=null)&&
                 ((scanning.getTime().compareTo(now) > 0) ||
@@ -67,9 +65,11 @@ public class SpideringService {
 
     }
 
-    public void saveReport(List<ActiveScanResponse>analysisResultList){
-        analysisResultList.stream().forEach(element ->
-                this.scanningRepository.save(new Scanning(element.getSite().get(0).getName(), element.getSite())));
+    public void updateScanning(ScanningResponse scanningResponse){
+        Scanning scanning = this.scanningRepository.findByUrl(scanningResponse.getUrl());
+        scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
+        scanning.setState("Done");
+        this.scanningRepository.save(scanning);
         this.logger.info("save results");
     }
 

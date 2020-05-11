@@ -1,6 +1,7 @@
 package com.example.zap.streaming.publisher;
 
-import com.example.zap.model.ActiveScanResponse;
+import com.example.zap.model.ActiveScan;
+import com.example.zap.model.ScanningResponse;
 import com.example.zap.streaming.KafkaConstants;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -10,11 +11,11 @@ import java.util.List;
 
 @Component
 public class ActiveScanKafkaPublisher implements StreamingPublisher {
-    private Producer<Long, List<ActiveScanResponse>> producer = ActiveScanProducerCreator.createProducer();
+    private Producer<Long, ScanningResponse> producer = ActiveScanProducerCreator.createProducer();
 
 
-    public void publish(List<ActiveScanResponse> analysisResultList) {
-        ProducerRecord<Long, List<ActiveScanResponse>> record = new ProducerRecord<>(KafkaConstants.TOPIC_NAME_URL_SCANNED, analysisResultList);
+    public void publish(ScanningResponse scanningResponse) {
+        ProducerRecord<Long, ScanningResponse> record = new ProducerRecord<>(KafkaConstants.TOPIC_NAME_URL_SCANNED, scanningResponse);
         producer.send(record);
     }
 }

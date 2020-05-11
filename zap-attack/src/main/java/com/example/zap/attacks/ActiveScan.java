@@ -1,7 +1,5 @@
 package com.example.zap.attacks;
 
-import com.example.zap.model.ActiveScanResponse;
-import com.example.zap.model.Site;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -17,10 +15,10 @@ import static com.example.zap.attacks.ZapConstants.*;
 public class ActiveScan implements Scanner {
     private final Logger logger = LoggerFactory.getLogger(ActiveScan.class);
 
-    public ActiveScanResponse scan(ApiResponse urlRequest) {
+    public com.example.zap.model.ActiveScan scan(ApiResponse urlRequest) {
 
         ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
-        ActiveScanResponse activeScanResponse = new ActiveScanResponse();
+        com.example.zap.model.ActiveScan activeScanResponse = new com.example.zap.model.ActiveScan();
         try {
             String url = ((ApiResponseElement)urlRequest).getValue();
             System.out.println("Active Scanning target : " + url);
@@ -42,7 +40,7 @@ public class ActiveScan implements Scanner {
             }
             this.logger.info("Active Scan complete");
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            activeScanResponse = objectMapper.readValue(api.core.jsonreport(), ActiveScanResponse.class);
+            activeScanResponse = objectMapper.readValue(api.core.jsonreport(), com.example.zap.model.ActiveScan.class);
 
 
         } catch (Exception e) {

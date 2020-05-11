@@ -1,27 +1,24 @@
 package com.dast.streaming.serlialization;
 
-import com.dast.model.ActiveScanResponse;
+import com.dast.model.ActiveScan;
+import com.dast.model.ScanningResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Deserializer;
-
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.List;
 
 public class ActiveScanResultDeserializer implements Deserializer {
     @Override
     public Object deserialize(String topic, byte[] data) {
         ObjectMapper mapper = new ObjectMapper();
-        List<ActiveScanResponse> activeScanResponses = null;
+        ScanningResponse scanningResponse = null;
         try {
-            activeScanResponses = mapper.readValue(data, new TypeReference<List<ActiveScanResponse>>(){});
+            scanningResponse = mapper.readValue(data, new TypeReference<ScanningResponse>(){});
         } catch (Exception e) {
 
             e.printStackTrace();
         }
-        return activeScanResponses;
+        return scanningResponse;
     }
 
     @Override

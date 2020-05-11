@@ -3,6 +3,8 @@ package com.dast.model;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,20 +15,15 @@ public class Scanning {
     private ObjectId id = new ObjectId();
     private String url;
     private Date time;
-    private List<Site> site;
-    private String state;
+    private List<ActiveScan> activeScanResponses;
 
-    public Scanning(String url, List<Site> site) {
-        this.url = url;
-        this.time = new Date();
-        this.site = site;
-        this.state = "Done";
-    }
+    private String state;
 
     public Scanning(String url) {
         this.url = url;
         this.time = new Date();
         this.state = "Processing";
+        this.activeScanResponses = new ArrayList<ActiveScan>();
     }
 
     public Scanning() {
@@ -56,12 +53,12 @@ public class Scanning {
         this.time = time;
     }
 
-    public List<Site> getSite() {
-        return site;
+    public List<ActiveScan> getActiveScanResponses() {
+        return activeScanResponses;
     }
 
-    public void setSite(List<Site> site) {
-        this.site = site;
+    public void setActiveScanResponses(List<ActiveScan> activeScanResponses) {
+        this.activeScanResponses = activeScanResponses;
     }
 
     public String getState() {

@@ -6,16 +6,19 @@ import java.util.List;
 public class ScanningModel extends RepresentationModel<ScanningModel> {
     private String url;
     private String id;
-    private List<Site> sites;
+    private String state;
+    private List<ActiveScan> activeScanResponses;
 
-    public ScanningModel(String url, String id, List<Site>sites) {
+    public ScanningModel(String url, String id, List<ActiveScan>activeScanResponses, String state) {
         this.url = url;
         this.id = id;
-        this.sites = sites;
+        this.activeScanResponses = activeScanResponses;
+        this.state = state;
     }
-    public ScanningModel(String url, String id) {
+    public ScanningModel(String url, String id, String state) {
         this.url = url;
         this.id = id;
+        this.state = state;
     }
 
     public String getUrl() {
@@ -34,11 +37,19 @@ public class ScanningModel extends RepresentationModel<ScanningModel> {
         this.id = id;
     }
 
-    public List<Site> getSites() {
-        return sites;
+    public List<ActiveScan> getActiveScanResponses() {
+        return activeScanResponses;
     }
 
-    public void setSites(List<Site> sites) {
-        this.sites = sites;
+    public void setActiveScanResponses(List<ActiveScan> activeScanResponses) {
+        this.activeScanResponses = activeScanResponses;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

@@ -1,17 +1,17 @@
-package com.example.zap.model;
+package com.dast.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class ActiveScanResponse {
+public class ActiveScan {
     @JsonProperty("@version")
     String version;
     List<Site> site;
 
-    public ActiveScanResponse() {
+    public ActiveScan() {
     }
 
-    public ActiveScanResponse(String version, List<Site> site) {
+    public ActiveScan(String version, List<Site> site) {
         this.version = version;
         this.site = site;
     }
@@ -30,10 +30,5 @@ public class ActiveScanResponse {
 
     public void setSite(List<Site> site) {
         this.site = site;
-    }
-
-    @Override
-    public String toString() {
-        return (version + site.size());
     }
 }

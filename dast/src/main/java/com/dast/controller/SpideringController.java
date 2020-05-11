@@ -31,11 +31,12 @@ public class SpideringController {
     ResponseEntity newScanning(@RequestBody RequestScanning newScanning){
         UrlValidator urlValidator = new UrlValidator(ALLOW_ALL_SCHEMES);
         if (urlValidator.isValid(newScanning.getUrl())) {
-            Scanning scanning = this.spideringService.getScanningByUrl(newScanning);
+            Scanning scanning = this.spideringService.getScanningByUrl(newScanning.getUrl());
+            scanning = this.spideringService.scanningUpdated(scanning);
             if(scanning == null){
                 scanning = this.spideringService.publish(newScanning);
             }
-            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString());
+            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString(), scanning.getState());
             EntityModel entityModel = new EntityModel(scanningModel,
                     linkTo(methodOn(SpideringController.class).resultScanning(scanningModel.getId())).withSelfRel());
             return ResponseEntity.accepted().body(entityModel);
@@ -50,7 +51,8 @@ public class SpideringController {
     ResponseEntity resultScanning(@PathVariable("spidering-id") String spideringId){
         Scanning scanning = this.spideringService.getSpideringResult(spideringId);
         if(scanning != null){
-            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString(), scanning.getSite());
+            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString(),
+                    scanning.getActiveScanResponses(),scanning.getState() );
             EntityModel entityModel = new EntityModel(scanningModel,
                     linkTo(methodOn(SpideringController.class).resultScanning(scanningModel.getId())).withSelfRel());
             return ResponseEntity.accepted().body(entityModel);
