@@ -14,17 +14,19 @@ public class Scanning {
     private String url;
     private Date time;
     private List<Site> site;
+    private String state;
 
     public Scanning(String url, List<Site> site) {
         this.url = url;
         this.time = new Date();
         this.site = site;
-
+        this.state = "Done";
     }
 
     public Scanning(String url) {
         this.url = url;
         this.time = new Date();
+        this.state = "Processing";
     }
 
     public Scanning() {
@@ -60,5 +62,13 @@ public class Scanning {
 
     public void setSite(List<Site> site) {
         this.site = site;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

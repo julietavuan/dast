@@ -1,16 +1,17 @@
 package com.example.zap.streaming.serialization;
 
 
+import com.example.zap.model.ActiveScanResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.kafka.common.header.Headers;
 import org.apache.kafka.common.serialization.Serializer;
 
 import java.util.Map;
+import java.util.List;
 
 
-public class ActiveScanResultSerializer implements Serializer {
+public class ActiveScanResultSerializer implements Serializer<List<ActiveScanResponse>> {
     @Override
-    public byte[] serialize(String topic, Object data) {
+    public byte[] serialize(String topic, List<ActiveScanResponse> data) {
         byte[] retVal = null;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
@@ -24,11 +25,6 @@ public class ActiveScanResultSerializer implements Serializer {
     @Override
     public void configure(Map configs, boolean isKey) {
 
-    }
-
-    @Override
-    public byte[] serialize(String topic, Headers headers, Object data) {
-        return new byte[0];
     }
 
     @Override

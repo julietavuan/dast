@@ -1,16 +1,19 @@
 package com.dast.streaming.consumer;
 import com.dast.model.ActiveScanResponse;
 import com.dast.service.SpideringService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import java.util.List;
-@Component
-public class KafkaConsumer {
-    private final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
 
+import java.io.IOException;
+import java.util.List;
+
+@Component
+public class
+
+ActiveScanKafkaConsumer implements StreamingConsumer{
     @Autowired
     private SpideringService spideringService;
 
@@ -22,4 +25,15 @@ public class KafkaConsumer {
     public void run(List<ActiveScanResponse> activeScanResponses){
         this.spideringService.saveReport(activeScanResponses);
     }
+
+   /* public void run(byte[] activeScanResponses){
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<ActiveScanResponse> pepe = null;
+        try {
+            pepe = objectMapper.readValue(activeScanResponses, new TypeReference<List<ActiveScanResponse>>(){});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.spideringService.saveReport(pepe);
+    }*/
 }

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class KafkaConsumer implements StreamingConsumer{
+public class ActiveScanKafkaConsumer implements StreamingConsumer{
     @Autowired
     private AttackService attackService;
 

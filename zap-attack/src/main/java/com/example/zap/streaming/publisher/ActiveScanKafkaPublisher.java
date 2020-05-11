@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class KafkaPublisher implements StreamingPublisher {
-    private Producer<Long, List<ActiveScanResponse>> producer = ProducerCreator.createProducer();
+public class ActiveScanKafkaPublisher implements StreamingPublisher {
+    private Producer<Long, List<ActiveScanResponse>> producer = ActiveScanProducerCreator.createProducer();
 
 
     public void publish(List<ActiveScanResponse> analysisResultList) {

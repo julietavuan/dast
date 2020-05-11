@@ -30,11 +30,6 @@ public class ActiveScanResultDeserializer implements Deserializer {
     }
 
     @Override
-    public Object deserialize(String topic, Headers headers, byte[] data) {
-        return null;
-    }
-
-    @Override
     public void close() {
 
     }

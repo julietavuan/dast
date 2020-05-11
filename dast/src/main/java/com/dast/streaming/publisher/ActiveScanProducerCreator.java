@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 
-public class ProducerCreator {
+public class ActiveScanProducerCreator {
 
     public static Producer<Long,String> createProducer(){
         Properties properties = new Properties();

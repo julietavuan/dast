@@ -15,7 +15,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
-public class ConsumerCreator  {
+public class ActiveScanConsumerCreator {
 
     @Bean
     public static DefaultKafkaConsumerFactory<Long,String> consumerFactory(){

@@ -45,15 +45,17 @@ public class SpideringService {
 
     public Scanning publish(RequestScanning requestScanning){
         Scanning scanning = new Scanning(requestScanning.getUrl());
-        Scanning scanning1 = this.scanningRepository.save(scanning);
+        Scanning savedScanning = this.scanningRepository.save(scanning);
         this.streamingPublisher.publish(requestScanning);
-        return scanning1;
+        return savedScanning;
     }
 
     public Scanning getScanningByUrl(RequestScanning newScanning){
         Scanning scanning = this.scanningRepository.findByUrl(newScanning.getUrl());
         Date now = new Date();
-        if((scanning!=null)&&(scanning.getTime().compareTo(now) > 6)){
+        if((scanning!=null)&&
+                ((scanning.getTime().compareTo(now) > 0) ||
+                        scanning.getState().equalsIgnoreCase("Processing"))){
             return null;
         }
         return scanning;

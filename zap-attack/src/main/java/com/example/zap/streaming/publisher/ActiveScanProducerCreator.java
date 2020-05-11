@@ -14,14 +14,14 @@ import org.apache.kafka.common.serialization.LongSerializer;
 
 import java.util.Properties;
 
-public class ProducerCreator {
+public class ActiveScanProducerCreator {
 
     public static Producer<Long,List<ActiveScanResponse>> createProducer(){
         Properties properties = new Properties();
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
         properties.put(ProducerConfig.CLIENT_ID_CONFIG, KafkaConstants.CLIENT_ID);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class.getName());
-        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ActiveScanResultSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, ActiveScanResultSerializer.class.getName());
         return new KafkaProducer<Long, List<ActiveScanResponse>>(properties);
     }
 }

@@ -31,4 +31,9 @@ public class ActiveScanResponse {
     public void setSite(List<Site> site) {
         this.site = site;
     }
+
+    @Override
+    public String toString() {
+        return (version + site.size());
+    }
 }
