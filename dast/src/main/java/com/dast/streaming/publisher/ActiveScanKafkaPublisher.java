@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class ActiveScanKafkaPublisher implements StreamingPublisher {
     private Producer<Long,String> producer = ActiveScanProducerCreator.createProducer();
 
-    public void publish(RequestScanning scanning){
-        ProducerRecord<Long,String> record = new ProducerRecord<>(KafkaConstants.TOPIC_NAME_SCANNING_TOPIC, scanning.getUrl());
+    public void publish(String url){
+        ProducerRecord<Long,String> record = new ProducerRecord<>(KafkaConstants.TOPIC_NAME_SCANNING_TOPIC, url);
         producer.send(record);
     }
 }

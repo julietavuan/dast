@@ -23,6 +23,9 @@ public class SpideringController {
     @Autowired
     private SpideringService spideringService;
 
+    @Autowired
+    private DastResponse dastResponse;
+
 
     public SpideringController() {
     }
@@ -31,18 +34,11 @@ public class SpideringController {
     ResponseEntity newScanning(@RequestBody RequestScanning newScanning){
         UrlValidator urlValidator = new UrlValidator(ALLOW_ALL_SCHEMES);
         if (urlValidator.isValid(newScanning.getUrl())) {
-            Scanning scanning = this.spideringService.getScanningByUrl(newScanning.getUrl());
-            scanning = this.spideringService.scanningUpdated(scanning);
-            if(scanning == null){
-                scanning = this.spideringService.publish(newScanning);
-            }
-            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString(), scanning.getState());
-            EntityModel entityModel = new EntityModel(scanningModel,
-                    linkTo(methodOn(SpideringController.class).resultScanning(scanningModel.getId())).withSelfRel());
-            return ResponseEntity.accepted().body(entityModel);
+            Scanning scanning = this.spideringService.publish(newScanning.getUrl());
+                return this.dastResponse.responseEntity(scanning);
         }
         else{
-            return ResponseEntity.badRequest().body("Bad URL");
+            return this.dastResponse.responseEntityBadUrl();
         }
 
     }
@@ -51,15 +47,13 @@ public class SpideringController {
     ResponseEntity resultScanning(@PathVariable("spidering-id") String spideringId){
         Scanning scanning = this.spideringService.getSpideringResult(spideringId);
         if(scanning != null){
-            ScanningModel scanningModel = new ScanningModel(scanning.getUrl(),scanning.getId().toHexString(),
-                    scanning.getActiveScanResponses(),scanning.getState() );
-            EntityModel entityModel = new EntityModel(scanningModel,
-                    linkTo(methodOn(SpideringController.class).resultScanning(scanningModel.getId())).withSelfRel());
-            return ResponseEntity.accepted().body(entityModel);
+            return this.dastResponse.responseEntity(scanning);
         }
         else{
-            return ResponseEntity.badRequest().body("Id does not match with Scanned URLs");
+            return this.dastResponse.responseEntityBadId();
         }
     }
+
+
 
 }

@@ -4,5 +4,5 @@ import com.dast.dao.RequestScanning;
 
 
 public interface StreamingPublisher {
-    void publish(RequestScanning scanning);
+    void publish(String url);
 }

@@ -38,25 +38,24 @@ public class SpideringService {
         this.streamingPublisher = streamingPublisher;
     }
 
-    public Scanning publish(RequestScanning requestScanning){
-        Scanning scanning = new Scanning(requestScanning.getUrl());
-        Scanning savedScanning = this.scanningRepository.save(scanning);
-        this.streamingPublisher.publish(requestScanning);
-        return savedScanning;
+    public Scanning publish(String url){
+        Scanning scanning = this.scanningRepository.findByUrl(url);
+        if((scanning == null)){
+            scanning = new Scanning(url);
+            this.scanningRepository.save(scanning);
+            this.streamingPublisher.publish(scanning.getUrl());
+        } else if(oldScanning(scanning)) this.streamingPublisher.publish(scanning.getUrl());
+        return scanning;
     }
 
-    public Scanning getScanningByUrl(String url){
-        return this.scanningRepository.findByUrl(url);
-    }
-
-    public Scanning scanningUpdated(Scanning scanning){
+    public boolean oldScanning (Scanning scanning){
         Date now = new Date();
         if((scanning!=null)&&
-                ((scanning.getTime().compareTo(now) > 0) ||
-                        scanning.getState().equalsIgnoreCase("Processing"))){
-            return null;
+                ((scanning.getTime().compareTo(now) > 0) &&
+                        (scanning.getState().equalsIgnoreCase("Done")))){
+            return true;
         }
-        return scanning;
+        return false;
     }
 
     public Scanning getSpideringResult(String spideringId){
