@@ -8,7 +8,7 @@ import org.apache.kafka.common.serialization.Serializer;
 import java.util.Map;
 
 
-public class AnalysisResultSerializer implements Serializer {
+public class ActiveScanResultSerializer implements Serializer {
     @Override
     public byte[] serialize(String topic, Object data) {
         byte[] retVal = null;

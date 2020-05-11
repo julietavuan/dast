@@ -1,10 +1,11 @@
 package com.example.zap.attacks;
 
-import com.example.zap.model.ResponseScanning;
+import com.example.zap.model.ActiveScanResponse;
+import com.example.zap.model.Site;
 import org.zaproxy.clientapi.core.ApiResponse;
 
 public interface Scanner {
-    ResponseScanning scan(ApiResponse url);
+    ActiveScanResponse scan(ApiResponse url);
 
 
 }

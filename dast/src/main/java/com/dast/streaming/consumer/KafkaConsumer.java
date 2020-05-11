@@ -1,6 +1,6 @@
 package com.dast.streaming.consumer;
+import com.dast.model.ActiveScanResponse;
 import com.dast.service.SpideringService;
-import com.dast.streaming.serlialization.AnalysisResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ public class KafkaConsumer {
     }
 
     @KafkaListener(topics = "url_scanned", groupId = "app_consumers")
-    public void run(List<AnalysisResult> analysisResultList){
-        this.spideringService.saveReport(analysisResultList);
+    public void run(List<ActiveScanResponse> activeScanResponses){
+        this.spideringService.saveReport(activeScanResponses);
     }
 }
