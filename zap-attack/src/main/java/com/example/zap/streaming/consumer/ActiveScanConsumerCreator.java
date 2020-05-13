@@ -1,9 +1,9 @@
 package com.example.zap.streaming.consumer;
 
-import com.example.zap.streaming.KafkaConstants;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -17,11 +17,17 @@ import java.util.Map;
 @Configuration
 public class ActiveScanConsumerCreator {
 
+    @Value("${kafka.broker}")
+    private String kafkaBroker;
+
+    @Value("${kafka.group.id}")
+    private String groupId;
+
     @Bean
-    public static DefaultKafkaConsumerFactory<Long,String> consumerFactory(){
+    public DefaultKafkaConsumerFactory<Long,String> consumerFactory(){
         Map<String,Object> properties = new HashMap<>();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaConstants.KAFKA_BROKER);
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.GROUP_ID);
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaBroker);
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         return new DefaultKafkaConsumerFactory<Long, String>(properties);

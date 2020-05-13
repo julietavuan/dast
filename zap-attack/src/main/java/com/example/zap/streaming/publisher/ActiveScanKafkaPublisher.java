@@ -1,21 +1,39 @@
 package com.example.zap.streaming.publisher;
 
-import com.example.zap.model.ActiveScan;
 import com.example.zap.model.ScanningResponse;
-import com.example.zap.streaming.KafkaConstants;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 @Component
 public class ActiveScanKafkaPublisher implements StreamingPublisher {
-    private Producer<Long, ScanningResponse> producer = ActiveScanProducerCreator.createProducer();
+    private final Logger logger = LoggerFactory.getLogger(ActiveScanKafkaPublisher.class);
 
+    @Autowired
+    private KafkaTemplate<Long, ScanningResponse> kafkaTemplate;
+
+    @Value("${kafka.url.scanned.topic.name}")
+    private String topicName;
 
     public void publish(ScanningResponse scanningResponse) {
-        ProducerRecord<Long, ScanningResponse> record = new ProducerRecord<>(KafkaConstants.TOPIC_NAME_URL_SCANNED, scanningResponse);
-        producer.send(record);
+        ListenableFuture<SendResult<Long, ScanningResponse>> future = kafkaTemplate.send(topicName, scanningResponse);
+
+        future.addCallback(new ListenableFutureCallback<SendResult<Long, ScanningResponse>>() {
+            @Override
+            public void onSuccess(SendResult<Long, ScanningResponse> result) {
+                System.out.println("Sent vulnerabilities of url=[" + result.getProducerRecord().value().getUrl() + "]");
+            }
+
+            @Override
+            public void onFailure(Throwable ex) {
+                System.err.println("Unable to send message due to : " + ex.getMessage());
+            }
+        });
     }
 }

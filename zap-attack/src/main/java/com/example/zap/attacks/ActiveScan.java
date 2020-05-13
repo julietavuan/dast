@@ -4,29 +4,32 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.zaproxy.clientapi.core.ApiResponse;
 import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ClientApi;
 
-import static com.example.zap.attacks.ZapConstants.*;
-
 @Component
 public class ActiveScan implements Scanner {
     private final Logger logger = LoggerFactory.getLogger(ActiveScan.class);
+    @Value("${zap.address}")
+    private String address;
+    @Value("${zap.port}")
+    private String port;
+    @Value("${zap.api.key}")
+    private String apiKey;
 
     public com.example.zap.model.ActiveScan scan(ApiResponse urlRequest) {
 
-        ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
+        ClientApi api = new ClientApi(address, Integer.parseInt(port), apiKey);
         com.example.zap.model.ActiveScan activeScanResponse = new com.example.zap.model.ActiveScan();
         try {
             String url = ((ApiResponseElement)urlRequest).getValue();
             System.out.println("Active Scanning target : " + url);
-            ApiResponse resp = api.ascan.scan(url, "False", "False", null, null, null);
+            ApiResponse resp = api.ascan.scan(url, "False", "True", null, null, null);
             String scanid;
             int progress;
-
-            // The scan now returns a scan id to support concurrent scanning
             scanid = ((ApiResponseElement) resp).getValue();
             while (true) {
                 Thread.sleep(5000);

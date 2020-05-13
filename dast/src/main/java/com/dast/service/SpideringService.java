@@ -1,7 +1,5 @@
 package com.dast.service;
 
-import com.dast.dao.RequestScanning;
-import com.dast.model.ActiveScan;
 import com.dast.model.Scanning;
 import com.dast.model.ScanningResponse;
 import com.dast.streaming.publisher.StreamingPublisher;
@@ -11,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
-import java.util.List;
 
 import java.util.Optional;
 
@@ -59,17 +56,30 @@ public class SpideringService {
     }
 
     public Scanning getSpideringResult(String spideringId){
-        Optional<Scanning> scanning = this.scanningRepository.findById(spideringId);
+            Optional<Scanning> scanning = this.scanningRepository.findById(spideringId);
         return scanning.orElse(null);
 
     }
 
     public void updateScanning(ScanningResponse scanningResponse){
         Scanning scanning = this.scanningRepository.findByUrl(scanningResponse.getUrl());
-        scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
-        scanning.setState("Done");
-        this.scanningRepository.save(scanning);
-        this.logger.info("save results");
+        if((scanning != null) &&
+                (((scanningResponse.getActiveScanResponseList()) != null )||
+        (!scanningResponse.getActiveScanResponseList().isEmpty()))){
+            scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
+            scanning.setState("Done");
+            this.scanningRepository.save(scanning);
+            this.logger.info("save results");
+        }
     }
 
+    public void failPublishScan(String url) {
+        Scanning scanning = this.scanningRepository.findByUrl(url);
+        if(scanning != null){
+            scanning.setState("Fail");
+            this.scanningRepository.save(scanning);
+        }else{
+            // exception
+        }
+    }
 }

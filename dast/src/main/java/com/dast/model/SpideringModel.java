@@ -1,18 +1,18 @@
 package com.dast.model;
 
-import org.springframework.hateoas.RepresentationModel;
 import java.util.List;
 
-public class ScanningModel extends RepresentationModel<ScanningModel> {
+public class SpideringModel {
     private String url;
     private String id;
     private String state;
+    private List<ActiveScan> activeScanResponses;
 
-
-    public ScanningModel(String url, String id, String state) {
+    public SpideringModel(String url, String id, String state,List<ActiveScan> activeScanResponses ) {
         this.url = url;
         this.id = id;
         this.state = state;
+        this.activeScanResponses = activeScanResponses;
     }
 
     public String getUrl() {
@@ -29,6 +29,14 @@ public class ScanningModel extends RepresentationModel<ScanningModel> {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<ActiveScan> getActiveScanResponses() {
+        return activeScanResponses;
+    }
+
+    public void setActiveScanResponses(List<ActiveScan> activeScanResponses) {
+        this.activeScanResponses = activeScanResponses;
     }
 
     public String getState() {
