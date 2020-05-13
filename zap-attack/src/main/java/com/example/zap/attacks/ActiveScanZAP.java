@@ -11,8 +11,8 @@ import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ClientApi;
 
 @Component
-public class ActiveScan implements Scanner {
-    private final Logger logger = LoggerFactory.getLogger(ActiveScan.class);
+public class ActiveScanZAP implements Scanner {
+    private final Logger logger = LoggerFactory.getLogger(ActiveScanZAP.class);
     @Value("${zap.address}")
     private String address;
     @Value("${zap.port}")
