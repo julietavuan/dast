@@ -1,7 +1,6 @@
-package com.dast.model;
+package com.dast.controller.model;
 
 import org.springframework.hateoas.RepresentationModel;
-import java.util.List;
 
 public class ScanningModel extends RepresentationModel<ScanningModel> {
     private String url;

@@ -2,7 +2,6 @@ package com.dast.controller;
 
 import com.dast.dao.RequestScanning;
 import com.dast.model.Scanning;
-import com.dast.model.ScanningModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.dast.service.SpideringService;

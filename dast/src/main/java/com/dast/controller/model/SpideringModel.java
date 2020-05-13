@@ -1,4 +1,6 @@
-package com.dast.model;
+package com.dast.controller.model;
+
+import com.dast.model.ActiveScan;
 
 import java.util.List;
 

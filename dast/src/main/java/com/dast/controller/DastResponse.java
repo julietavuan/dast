@@ -1,8 +1,8 @@
 package com.dast.controller;
 
 import com.dast.model.Scanning;
-import com.dast.model.ScanningModel;
-import com.dast.model.SpideringModel;
+import com.dast.controller.model.ScanningModel;
+import com.dast.controller.model.SpideringModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
