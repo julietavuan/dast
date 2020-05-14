@@ -1,5 +1,5 @@
 package com.dast.streaming.consumer;
-import com.dast.model.ScanningResponse;
+import com.dast.streaming.model.ScanningResponse;
 import com.dast.service.SpideringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;

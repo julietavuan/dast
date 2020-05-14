@@ -1,7 +1,6 @@
 package com.dast.streaming.serlialization;
 
-import com.dast.model.ActiveScan;
-import com.dast.model.ScanningResponse;
+import com.dast.streaming.model.ScanningResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Deserializer;

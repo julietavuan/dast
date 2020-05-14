@@ -12,9 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SpideringController.class)
@@ -26,20 +27,47 @@ public class SpideringControllerTest {
     private SpideringService service;
 
 
+/*    @Test
+    public void testInValidUrl()throws Exception{
+        String invalidUrl="abc";
+        Boolean isValidUrl=isValidUrl(invalidUrl);
+        assertFalse(isValidUrl);
+    }
+
     @Test
-    public void testScanningOk() throws Exception {
-        String url = "https://public-firing-range.appspot.com";
-        mockMvc.perform(post("scanning").contentType(MediaType.APPLICATION_JSON)
-                .content(url)).andExpect(status().isAccepted());
+    public void testInValidUrlEmpty()throws Exception{
+        String invalidUrl="";
+        Boolean isValidUrl=isValidUrl(invalidUrl);
+        assertFalse(isValidUrl);
+    }
+
+    @Test
+    public void testValidUrl()throws Exception{
+        String validUrl="http://localhost:8080";
+        Boolean isValidUrl=isValidUrl(validUrl);
+        assertTrue(isValidUrl);
+    }
+
+
+    @Test
+    public void testGetUrlFromRequest()throws Exception{
+        String request=getRequestAsString("requests/okRequest");
+        String url=getUrlFromRequest(request);
+        assertEquals("http://localhost/setup.php", url);
 
     }
+
     @Test
-    public void testScanningResultsOk() throws Exception {
-        Scanning scanning = new Scanning();
-        mockMvc.perform(get("/dast/employees")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-
-
+    public void testInValidId()throws Exception{
+        String id="12";
+        Boolean isValid=DastUtil.validateId(id);
+        assertFalse(isValid);
     }
+
+    @Test
+    public void testValidId()throws Exception{
+        //String id=UUID.randomUUID().toString();
+        Boolean isValid=DastUtil.validateId(id);
+        assertTrue(isValid);
+    }*/
 }

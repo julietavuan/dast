@@ -16,7 +16,6 @@ import static org.apache.commons.validator.UrlValidator.ALLOW_ALL_SCHEMES;
 public class SpideringController {
     private final Logger logger = LoggerFactory.getLogger(SpideringController.class);
 
-
     @Autowired
     private SpideringService spideringService;
 
@@ -43,12 +42,7 @@ public class SpideringController {
     @GetMapping("/spiderings/{spidering-id}/results")
     ResponseEntity resultScanning(@PathVariable("spidering-id") String spideringId){
         Scanning scanning = this.spideringService.getSpideringResult(spideringId);
-        if(scanning != null){
-            return this.dastResponse.responseEntitySpidering(scanning);
-        }
-        else{
-            return this.dastResponse.responseEntityBadId();
-        }
+        return this.dastResponse.responseEntitySpidering(scanning);
     }
 
 

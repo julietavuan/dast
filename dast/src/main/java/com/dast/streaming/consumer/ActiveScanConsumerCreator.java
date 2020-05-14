@@ -1,6 +1,6 @@
 package com.dast.streaming.consumer;
 
-import com.dast.model.ScanningResponse;
+import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.serlialization.ActiveScanResultDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;

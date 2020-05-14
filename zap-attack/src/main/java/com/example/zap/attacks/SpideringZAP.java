@@ -28,6 +28,7 @@ public class SpideringZAP implements Spidering{
             String scanID;
             int progress;
             scanID = ((ApiResponseElement) resp).getValue();
+            // aplicar manejo de ttl
             while (true) {
                 Thread.sleep(1000);
                 progress = Integer.parseInt(((ApiResponseElement) api.spider.status(scanID)).getValue());

@@ -17,12 +17,12 @@ public class Scanning {
     private Date time;
     private List<ActiveScan> activeScanResponses;
 
-    private String state;
+    private ScanningState state;
 
     public Scanning(String url) {
         this.url = url;
         this.time = new Date();
-        this.state = "Processing";
+        this.state = ScanningState.PROCESSING;
         this.activeScanResponses = new ArrayList<ActiveScan>();
     }
 
@@ -62,10 +62,22 @@ public class Scanning {
     }
 
     public String getState() {
-        return state;
+        return this.state.toString();
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setStateToFail(){
+        this.state = ScanningState.FAIL;
+    }
+
+    public void setStateToProcessing(){
+        this.state = ScanningState.PROCESSING;
+    }
+
+    public void setStateToDone(){
+        this.state = ScanningState.DONE;
+    }
+
+    public boolean haveFail() {
+        return ScanningState.FAIL.equals(this.state);
     }
 }

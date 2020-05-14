@@ -26,16 +26,15 @@ public class ActiveScanKafkaPublisher implements StreamingPublisher {
     public void publish(String url){
         this.logger.info("Send URL to Scan");
         ListenableFuture<SendResult<Long, String>> future = kafkaTemplate.send(topicName, url);
-
         future.addCallback(new ListenableFutureCallback<SendResult<Long, String>>() {
             @Override
             public void onSuccess(SendResult<Long, String> result) {
-                System.out.println("Sent message=[" + url + "]");
+                logger.info("Sent message=[" + url + "]");
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                System.err.println("Unable to send message=[" + url + "] due to : " + ex.getMessage());
+                logger.error("Unable to send message=[" + url + "] due to : " + ex.getMessage());
                 spideringService.failPublishScan(url);
             }
         });

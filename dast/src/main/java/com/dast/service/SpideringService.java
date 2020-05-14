@@ -1,7 +1,8 @@
 package com.dast.service;
 
+import com.dast.exception.NoScanningFoundException;
 import com.dast.model.Scanning;
-import com.dast.model.ScanningResponse;
+import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.publisher.StreamingPublisher;
 import com.dast.repository.ScanningRepository;
 import org.slf4j.Logger;
@@ -16,12 +17,10 @@ import java.util.Optional;
 public class SpideringService {
     private final Logger logger = LoggerFactory.getLogger(SpideringService.class);
 
-
     @Autowired
     private StreamingPublisher streamingPublisher;
     @Autowired
     private ScanningRepository scanningRepository;
-
 
     public SpideringService() {
 
@@ -41,45 +40,60 @@ public class SpideringService {
             scanning = new Scanning(url);
             this.scanningRepository.save(scanning);
             this.streamingPublisher.publish(scanning.getUrl());
-        } else if(oldScanning(scanning)) this.streamingPublisher.publish(scanning.getUrl());
+        } else if(shouldScanAgain(scanning)) this.streamingPublisher.publish(scanning.getUrl());
         return scanning;
     }
 
-    public boolean oldScanning (Scanning scanning){
+    private boolean shouldScanAgain(Scanning scanning){
+        return isOldScanning(scanning) || scanning.haveFail();
+    }
+
+    private boolean isOldScanning(Scanning scanning){
         Date now = new Date();
-        if((scanning!=null)&&
+        return (scanning!=null)&&
+                // Verificar la comparación. Ajustarla para que compare por dias
                 ((scanning.getTime().compareTo(now) > 0) &&
-                        (scanning.getState().equalsIgnoreCase("Done")))){
-            return true;
-        }
-        return false;
+                        (scanning.getState().equalsIgnoreCase("Done")));
     }
 
     public Scanning getSpideringResult(String spideringId){
             Optional<Scanning> scanning = this.scanningRepository.findById(spideringId);
-        return scanning.orElse(null);
+        return scanning.orElseThrow(NoScanningFoundException::new);
 
     }
 
+    /**
+     * This method will update the corresponding scanning every time it has any response
+     * If Response is null or we can't find a corresponding scanning we will report to #App
+     *
+     */
     public void updateScanning(ScanningResponse scanningResponse){
         Scanning scanning = this.scanningRepository.findByUrl(scanningResponse.getUrl());
-        if((scanning != null) &&
-                (((scanningResponse.getActiveScanResponseList()) != null )||
-        (!scanningResponse.getActiveScanResponseList().isEmpty()))){
-            scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
-            scanning.setState("Done");
-            this.scanningRepository.save(scanning);
-            this.logger.info("save results");
+        if(scanning != null){
+                scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
+                if(scanningResponse.succeed()){
+                    scanning.setStateToDone();
+                }else{
+                    scanning.setStateToFail();
+                }
+                this.scanningRepository.save(scanning);
+                this.logger.info("results saved");
+        }else{
+            // Report to Statistics app (new relic)
+            // We could throw an exception. Is debatable
+            logger.error("No scanning found for url: "+ scanningResponse.getUrl());
         }
     }
 
     public void failPublishScan(String url) {
         Scanning scanning = this.scanningRepository.findByUrl(url);
         if(scanning != null){
-            scanning.setState("Fail");
+            scanning.setStateToFail();
             this.scanningRepository.save(scanning);
         }else{
-            // exception
+            // Report to Statistics app (new relic)
+            // We could throw an exception. Is debatable
+            logger.error("No scanning found for url: "+ url);
         }
     }
 }

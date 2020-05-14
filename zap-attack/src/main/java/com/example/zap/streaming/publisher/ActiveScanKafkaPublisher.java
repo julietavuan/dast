@@ -27,12 +27,12 @@ public class ActiveScanKafkaPublisher implements StreamingPublisher {
         future.addCallback(new ListenableFutureCallback<SendResult<Long, ScanningResponse>>() {
             @Override
             public void onSuccess(SendResult<Long, ScanningResponse> result) {
-                System.out.println("Sent vulnerabilities of url=[" + result.getProducerRecord().value().getUrl() + "]");
+                logger.info("Sent vulnerabilities of url=[" + result.getProducerRecord().value().getUrl() + "]");
             }
 
             @Override
             public void onFailure(Throwable ex) {
-                System.err.println("Unable to send message due to : " + ex.getMessage());
+                logger.error("Unable to send message due to : " + ex.getMessage());
             }
         });
     }
