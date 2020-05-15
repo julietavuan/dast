@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,14 +15,14 @@ public class Scanning {
     @Id
     private ObjectId id = new ObjectId();
     private String url;
-    private Date time;
+    private LocalDate time;
     private List<ActiveScan> activeScanResponses;
 
     private ScanningState state;
 
     public Scanning(String url) {
         this.url = url;
-        this.time = new Date();
+        this.time = LocalDate.now();
         this.state = ScanningState.PROCESSING;
         this.activeScanResponses = new ArrayList<ActiveScan>();
     }
@@ -45,11 +46,11 @@ public class Scanning {
         this.url = url;
     }
 
-    public Date getTime() {
+    public LocalDate getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalDate time) {
         this.time = time;
     }
 

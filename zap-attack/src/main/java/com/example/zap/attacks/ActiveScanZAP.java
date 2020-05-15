@@ -44,7 +44,7 @@ public class ActiveScanZAP implements Scanner {
             this.logger.info("Active Scan complete");
             ObjectMapper objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             activeScanResponse = objectMapper.readValue(api.core.jsonreport(), com.example.zap.model.ActiveScan.class);
-
+            this.logger.info("Get this amount of scannings" + String.valueOf(activeScanResponse.getSite().size()));
 
         } catch (Exception e) {
             this.logger.error("Exception : " + e.getMessage());

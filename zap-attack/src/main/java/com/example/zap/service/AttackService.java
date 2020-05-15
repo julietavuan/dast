@@ -33,6 +33,7 @@ public class AttackService {
                     .map(element -> this.scanner.scan(element))
                     .collect(Collectors.toList());
              scanningResponse.setActiveScanResponseList(activeScanList);
+             this.logger.info("Success scanning url");
              scanningResponse.succeed();
         }else{
             logger.error("Didn't get any spidering for url: "+ url);

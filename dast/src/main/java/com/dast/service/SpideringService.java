@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import java.util.Optional;
@@ -49,10 +52,9 @@ public class SpideringService {
     }
 
     private boolean isOldScanning(Scanning scanning){
-        Date now = new Date();
+        LocalDate now = LocalDate.now();
         return (scanning!=null)&&
-                // Verificar la comparación. Ajustarla para que compare por dias
-                ((scanning.getTime().compareTo(now) > 0) &&
+                ((ChronoUnit.DAYS.between(scanning.getTime(), now) > 6) &&
                         (scanning.getState().equalsIgnoreCase("Done")));
     }
 
