@@ -1,7 +1,7 @@
 # dast
 DAST tool with ZAP
 
-Use docker-compose.yml to run de app. \n
+Use docker-compose.yml to run de app.
 For this challenge I add the JAR files of zap_attack and dast to make the buil easier, 
 a better way could be a script that creates the JAR that runs before docker-compose up .
 For now, we have this way :) .
