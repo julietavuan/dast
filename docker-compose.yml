@@ -1,0 +1,55 @@
+version: '3'
+services:
+  api:
+    build:
+      context: ./zap-attack
+    image: zap-api-image
+    ports:
+    - "8080:8080"
+    volumes:
+    - .:/app
+    depends_on:
+    - kafka-server
+  zap:
+    image: "owasp/zap2docker-stable:latest"
+    command: zap.sh -daemon -host 0.0.0.0 -port 8090 -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true -config api.key=fookey
+    expose:
+    - "8090"
+  dvwa:
+    image: "infoslack/dvwa:latest"
+    ports:
+    - "80:80"
+    expose:
+    - "80"
+  web:
+    build:
+      context: ./dast
+    image: dast-api-image
+    ports:
+      - 9091:8080
+    depends_on:
+      - kafka-server
+  api-database:
+    image: mongo:latest
+    container_name: "api-database"
+    ports:
+      - 27017:27017
+  zookeeper-server:
+    image: 'bitnami/zookeeper:latest'
+    ports:
+      - '2181:2181'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+  kafka-server:
+    image: 'bitnami/kafka:latest'   
+    ports:
+      - '9092:9092'
+    environment:
+      - ADVERTISED.HOST.NAME=kafka
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-server:2181
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka-server:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+    depends_on:
+      - zookeeper-server
+
