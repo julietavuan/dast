@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  zap-connector:
     build:
       context: ./zap-attack
     image: zap-api-image
@@ -21,7 +21,7 @@ services:
     - "80:80"
     expose:
     - "80"
-  web:
+  dast:
     build:
       context: ./dast
     image: dast-api-image
@@ -29,7 +29,7 @@ services:
       - 9091:8080
     depends_on:
       - kafka-server
-  api-database:
+  dast-db:
     image: mongo:latest
     container_name: "api-database"
     ports:
