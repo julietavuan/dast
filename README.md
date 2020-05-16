@@ -1,10 +1,11 @@
 # dast
 DAST tool with ZAP
 
-Use docker-compose.yml to run de app.
-For this challenge I add the JAR files of zap_attack and dast to make an easier build of zap and dast images, 
-a better way could be a script that creates the JAR that runs before docker-compose up .
-For now, we have this way :) .
+Run `docker-compose up` to execute the app. I added the JAR files for zap_attack and dast to make it easier/faster to build zap and dast images.
+You can also use de star-dast.sh to run:
+- mvn clean
+- create images
+- run docker-compose up
 
 You can scan an URL by use the 
 POST request like:
