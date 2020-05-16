@@ -10,8 +10,6 @@ import org.zaproxy.clientapi.core.ApiResponse;
 import org.zaproxy.clientapi.core.ApiResponseElement;
 import org.zaproxy.clientapi.core.ClientApi;
 
-import java.nio.charset.StandardCharsets;
-
 @Component
 public class ActiveScanZAP implements Scanner {
     private final Logger logger = LoggerFactory.getLogger(ActiveScanZAP.class);

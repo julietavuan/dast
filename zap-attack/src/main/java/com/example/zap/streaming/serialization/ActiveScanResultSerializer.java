@@ -1,6 +1,5 @@
 package com.example.zap.streaming.serialization;
 
-
 import com.example.zap.model.ScanningResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.serialization.Serializer;
