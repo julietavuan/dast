@@ -31,14 +31,15 @@ public class ActiveScanZAP implements Scanner {
             String scanid;
             int progress;
             scanid = ((ApiResponseElement) resp).getValue();
-            while (true) {
+            boolean finish = false;
+            while (!finish) {
                 Thread.sleep(5000);
                 progress =
                         Integer.parseInt(
                                 ((ApiResponseElement) api.ascan.status(scanid)).getValue());
                 this.logger.info("Active Scan progress : " + progress + "%");
                 if (progress >= 100) {
-                    break;
+                    finish = true;
                 }
             }
             this.logger.info("Active Scan complete");
