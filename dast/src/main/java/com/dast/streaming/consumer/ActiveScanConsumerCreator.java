@@ -3,6 +3,7 @@ package com.dast.streaming.consumer;
 import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.serlialization.ActiveScanResultDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,8 @@ public class ActiveScanConsumerCreator {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ActiveScanResultDeserializer.class.getName());
+        properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+        properties.put(ProducerConfig.MAX_REQUEST_SIZE_CONFIG,41943040);
         return new DefaultKafkaConsumerFactory<Long, ScanningResponse>(properties);
     }
 

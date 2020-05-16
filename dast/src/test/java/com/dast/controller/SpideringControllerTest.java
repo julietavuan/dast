@@ -1,20 +1,21 @@
 package com.dast.controller;
 
+import com.dast.dao.RequestScanning;
 import com.dast.model.Scanning;
 import com.dast.service.SpideringService;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @RunWith(SpringRunner.class)
@@ -23,51 +24,53 @@ public class SpideringControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private SpideringController spideringController;
+
     @MockBean
-    private SpideringService service;
+    public SpideringService service;
 
-
-/*    @Test
-    public void testInValidUrl()throws Exception{
-        String invalidUrl="abc";
-        Boolean isValidUrl=isValidUrl(invalidUrl);
-        assertFalse(isValidUrl);
-    }
+    @MockBean
+    public DastResponse dastResponse;
 
     @Test
-    public void testInValidUrlEmpty()throws Exception{
-        String invalidUrl="";
-        Boolean isValidUrl=isValidUrl(invalidUrl);
-        assertFalse(isValidUrl);
+    public void testInvalidUrl()throws Exception{
+        RequestScanning  url= new RequestScanning("abc");
+        mockMvc.perform(post("/dast/scanning", url)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
+
 
     @Test
     public void testValidUrl()throws Exception{
-        String validUrl="http://localhost:8080";
-        Boolean isValidUrl=isValidUrl(validUrl);
-        assertTrue(isValidUrl);
+        RequestScanning  url= new RequestScanning("https://public-firing-range.appspot.com/");
+        Mockito
+                .when(service.publish(url.getUrl())).thenReturn(new Scanning(url.getUrl()));
+        mockMvc.perform(post("/scanning", url)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
     }
 
 
     @Test
-    public void testGetUrlFromRequest()throws Exception{
-        String request=getRequestAsString("requests/okRequest");
-        String url=getUrlFromRequest(request);
-        assertEquals("http://localhost/setup.php", url);
+    public void testGetScanningResultWrong()throws Exception{
+        String idScan= "aaaa";
+        mockMvc.perform(get("/spiderings/"+idScan)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
 
     }
 
     @Test
-    public void testInValidId()throws Exception{
-        String id="12";
-        Boolean isValid=DastUtil.validateId(id);
-        assertFalse(isValid);
+    public void testGetScanningResultOk()throws Exception{
+        String idScan= "987823lk23";
+        Mockito
+                .when(service.getSpideringResult(idScan)).thenReturn(new Scanning());
+        mockMvc.perform(get("/spiderings/"+idScan)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isAccepted());
     }
 
-    @Test
-    public void testValidId()throws Exception{
-        //String id=UUID.randomUUID().toString();
-        Boolean isValid=DastUtil.validateId(id);
-        assertTrue(isValid);
-    }*/
+
 }

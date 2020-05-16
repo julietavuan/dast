@@ -24,7 +24,7 @@ public class SpideringZAP implements Spidering{
         List<ApiResponse> spiderResults = null;
         try {
             System.out.println("Spidering target : " + url);
-            ApiResponse resp = api.spider.scan(url, "10", null, null, null);
+            ApiResponse resp = api.spider.scan(url, "1", "True", null, null);
             String scanID;
             int progress;
             scanID = ((ApiResponseElement) resp).getValue();

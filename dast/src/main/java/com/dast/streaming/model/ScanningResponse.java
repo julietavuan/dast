@@ -16,6 +16,10 @@ public class ScanningResponse {
         this.activeScanResponseList = activeScanResponseList;
     }
 
+    public ScanningResponse(String url) {
+        this.url = url;
+    }
+
     public String getUrl() {
         return url;
     }
@@ -30,6 +34,10 @@ public class ScanningResponse {
 
     public void setActiveScanResponseList(List<ActiveScan> activeScanResponseList) {
         this.activeScanResponseList = activeScanResponseList;
+    }
+
+    public void setState(ScanningResponseState state) {
+        this.state = state;
     }
 
     public boolean succeed() {

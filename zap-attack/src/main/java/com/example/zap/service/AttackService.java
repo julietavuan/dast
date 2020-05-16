@@ -29,6 +29,7 @@ public class AttackService {
         List<ApiResponse> urlSpidering = this.spidering.spidering(url);
         ScanningResponse scanningResponse = new ScanningResponse(url);
         if(urlSpidering != null) {
+            this.logger.info("Total of urls to scan : " + urlSpidering.size());
             List<ActiveScan> activeScanList = urlSpidering.stream()
                     .map(element -> this.scanner.scan(element))
                     .collect(Collectors.toList());

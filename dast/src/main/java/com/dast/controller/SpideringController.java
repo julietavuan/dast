@@ -34,6 +34,7 @@ public class SpideringController {
             return this.dastResponse.responseEntityScanning(scanning);
         }
         else{
+            this.logger.error("Enter to bad URL test");
             return this.dastResponse.responseEntityBadUrl();
         }
 
