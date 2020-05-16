@@ -6,22 +6,15 @@ import com.dast.repository.ScanningRepository;
 import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.model.ScanningResponseState;
 import com.dast.streaming.publisher.StreamingPublisher;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.time.LocalDate;
-
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(SpideringService.class)
@@ -73,19 +66,35 @@ public class SpideringServiceTest {
     }
 
     @Test
-    public void updateScanningOk(){
-        String url="https://public-firing-range.appspot.com";
-        ScanningResponse scanningResponse = new ScanningResponse(url);
+    public void updateScanningFail(){
+        Scanning scanning = new Scanning("url");
+        ScanningResponse scanningResponse = new ScanningResponse();
+        scanningResponse.setUrl("url");
         scanningResponse.setState(ScanningResponseState.FAIL);
+        Mockito
+                .when(scanningRepository.findByUrl("url")).thenReturn(scanning);
         spideringService.updateScanning(scanningResponse);
+        assertEquals(ScanningResponseState.FAIL.toString(),scanning.getState());
     }
 
     @Test
-    public void updateScanningToDone(){
-        String url="https://public-firing-range.appspot.com";
-        ScanningResponse scanningResponse = new ScanningResponse(url);
+    public void updateScanningSuccess(){
+        Scanning scanning = new Scanning("url");
+        ScanningResponse scanningResponse = new ScanningResponse();
+        scanningResponse.setUrl("url");
         scanningResponse.setState(ScanningResponseState.SUCCESS);
+        Mockito
+                .when(scanningRepository.findByUrl("url")).thenReturn(scanning);
         spideringService.updateScanning(scanningResponse);
+        assertEquals(ScanningResponseState.SUCCESS.toString(),scanning.getState());
+    }
 
+    @Test
+    public void failPublishScan(){
+        Scanning scanning = new Scanning("url");
+        Mockito
+                .when(scanningRepository.findByUrl("url")).thenReturn(scanning);
+        spideringService.failPublishScan("url");
+        assertEquals(ScanningResponseState.FAIL.toString(),scanning.getState());
     }
 }

@@ -77,14 +77,14 @@ public class SpideringService {
     public void updateScanning(ScanningResponse scanningResponse){
         Scanning scanning = this.scanningRepository.findByUrl(scanningResponse.getUrl());
         if(scanning != null){
-                scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
-                if(scanningResponse.succeed()){
-                    scanning.setStateToDone();
-                }else{
-                    scanning.setStateToFail();
-                }
-                this.scanningRepository.save(scanning);
-                this.logger.info("results saved");
+            scanning.setActiveScanResponses(scanningResponse.getActiveScanResponseList());
+            if(scanningResponse.succeed()){
+                scanning.setStateToDone();
+            }else{
+                scanning.setStateToFail();
+            }
+            this.scanningRepository.save(scanning);
+            this.logger.info("results saved");
         }else{
             // Report to Statistics app (new relic)
             // We could throw an exception. Is debatable
