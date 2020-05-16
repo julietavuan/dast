@@ -6,6 +6,7 @@ You can also use de star-dast.sh to run:
 - mvn clean
 - create images
 - run docker-compose up
+The problem is that sometimes it does not work so good. So I recomend to use the JARS and comment the mvn clean command.
 
 You can scan an URL by use the 
 POST request like:
