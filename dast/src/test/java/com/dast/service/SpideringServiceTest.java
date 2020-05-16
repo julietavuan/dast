@@ -1,9 +1,11 @@
 package com.dast.service;
 
 import com.dast.model.Scanning;
+import com.dast.model.ScanningState;
 import com.dast.repository.ScanningRepository;
 import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.model.ScanningResponseState;
+import com.dast.streaming.publisher.StreamingPublisher;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,18 +18,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 @RunWith(SpringRunner.class)
 @WebMvcTest(SpideringService.class)
 public class SpideringServiceTest {
-
-    @TestConfiguration
-    static class SpideringServiceImplTestContextConfiguration {
-
-        @Bean
-        public SpideringService spideringService() {
-            return new SpideringService();
-        }
-    }
 
     @Autowired
     private SpideringService spideringService;
@@ -35,26 +33,45 @@ public class SpideringServiceTest {
     @MockBean
     private ScanningRepository scanningRepository;
 
-    @Test
-    public void notPublish(){}
-
-    public void publishOk(){}
-
+    @MockBean
+    private StreamingPublisher streamingPublisher;
 
     @Test
-    public void getSpideringResultOk(String spideringId){
-        Scanning scanning = spideringService.getSpideringResult("29424093");
+    public void publishNew(){
+        String url = "sarasa";
+        Mockito
+                .when(scanningRepository.findByUrl(url)).thenReturn(null);
+        Scanning scanning = spideringService.publish(url);
+        assertEquals(scanning.getUrl(),url);
+        assertEquals(scanning.getState(),ScanningState.PROCESSING.toString());
     }
 
     @Test
-    public void getSpideringResultWrong(String spideringId){}
-    @Before
-    public void setUp() {
-        Scanning scanning = new Scanning("https://public-firing-range.appspot.com");
-        String url = "https://public-firing-range.appspot.com";
-        Mockito.when(scanningRepository.findByUrl(url))
-                .thenReturn(scanning);
+    public void publishOld(){
+        String url = "sarasa";
+        Scanning scanning = new Scanning(url);
+        LocalDate date = LocalDate.now().minusDays(8);
+        scanning.setTime(date);
+        scanning.setStateToDone();
+        Mockito
+                .when(scanningRepository.findByUrl(url)).thenReturn(scanning);
+        Scanning scanningResponse = spideringService.publish(url);
+        assertEquals(ScanningState.PROCESSING.toString(),scanningResponse.getState());
     }
+
+    @Test
+    public void publishFailed(){
+        String url = "sarasa";
+        Scanning scanning = new Scanning(url);
+        LocalDate date = LocalDate.now().minusDays(8);
+        scanning.setTime(date);
+        scanning.setStateToFail();
+        Mockito
+                .when(scanningRepository.findByUrl(url)).thenReturn(scanning);
+        Scanning scanningResponse = spideringService.publish(url);
+        assertEquals(ScanningState.PROCESSING.toString(),scanningResponse.getState());
+    }
+
     @Test
     public void updateScanningOk(){
         String url="https://public-firing-range.appspot.com";
@@ -63,7 +80,6 @@ public class SpideringServiceTest {
         spideringService.updateScanning(scanningResponse);
     }
 
-
     @Test
     public void updateScanningToDone(){
         String url="https://public-firing-range.appspot.com";
@@ -71,17 +87,5 @@ public class SpideringServiceTest {
         scanningResponse.setState(ScanningResponseState.SUCCESS);
         spideringService.updateScanning(scanningResponse);
 
-    }
-
-    @Test
-    public void failPublishScanWrong(){
-        String url="alskdj";
-        spideringService.failPublishScan(url);
-    }
-
-    @Test
-    public void failPublishScanOk(){
-        String url="https://public-firing-range.appspot.com";
-        spideringService.failPublishScan(url);
     }
 }

@@ -2,6 +2,7 @@ package com.dast.service;
 
 import com.dast.exception.NoScanningFoundException;
 import com.dast.model.Scanning;
+import com.dast.model.ScanningState;
 import com.dast.streaming.model.ScanningResponse;
 import com.dast.streaming.publisher.StreamingPublisher;
 import com.dast.repository.ScanningRepository;
@@ -43,7 +44,11 @@ public class SpideringService {
             scanning = new Scanning(url);
             this.scanningRepository.save(scanning);
             this.streamingPublisher.publish(scanning.getUrl());
-        } else if(shouldScanAgain(scanning)) this.streamingPublisher.publish(scanning.getUrl());
+        } else if(shouldScanAgain(scanning)){
+            scanning.setStateToProcessing();
+            this.scanningRepository.save(scanning);
+            this.streamingPublisher.publish(scanning.getUrl());
+        }
         return scanning;
     }
 
@@ -55,7 +60,7 @@ public class SpideringService {
         LocalDate now = LocalDate.now();
         return (scanning!=null)&&
                 ((ChronoUnit.DAYS.between(scanning.getTime(), now) > 6) &&
-                        (scanning.getState().equalsIgnoreCase("Done")));
+                        (scanning.getState().equalsIgnoreCase(ScanningState.DONE.toString())));
     }
 
     public Scanning getSpideringResult(String spideringId){
