@@ -36,10 +36,14 @@ public class ScanningResponse {
     }
 
     public void succeed() {
-        state = ScanningState.SUCCESS;
+        this.state = ScanningState.SUCCESS;
     }
 
     public void fail() {
-        state = ScanningState.FAIL;
+        this.state = ScanningState.FAIL;
     }
+
+   public ScanningState getState() {
+       return state;
+   }
 }

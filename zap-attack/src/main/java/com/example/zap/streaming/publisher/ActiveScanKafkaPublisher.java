@@ -27,7 +27,7 @@ public class ActiveScanKafkaPublisher implements StreamingPublisher {
         future.addCallback(new ListenableFutureCallback<SendResult<Long, ScanningResponse>>() {
             @Override
             public void onSuccess(SendResult<Long, ScanningResponse> result) {
-                logger.info("Amount of vulnerabilites foung" + String.valueOf(result.getProducerRecord().value().getActiveScanResponseList().size()));
+                logger.info("Amount of vulnerabilites found: " + String.valueOf(result.getProducerRecord().value().getActiveScanResponseList().size()));
                 logger.info("Sent vulnerabilities of url=[" + result.getProducerRecord().value().getUrl() + "]");
             }
 
