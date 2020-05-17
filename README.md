@@ -11,11 +11,10 @@ The problem is that sometimes it does not work so good. So I recomend to use the
 
 You can scan an URL by use the 
 POST request like:
-POST http://localhost:9091/dast/scanning 
-body: 
-{https://www.randomstorm.com/images/tools/dvwa.png}
+- POST http://localhost:9091/dast/scanning 
+- body:{https://www.randomstorm.com/images/tools/dvwa.png}
 
-and to see the results of the scanning use the
+and to see the results of the scanning (once it was processed) you can use the
 GET request like:
-GET http://localhost:9091/dast/spiderings/{scanId}/results
+- GET http://localhost:9091/dast/spiderings/{scanId}/results
 
